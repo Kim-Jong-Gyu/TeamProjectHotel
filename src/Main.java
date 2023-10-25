@@ -124,7 +124,7 @@ public class Main {
             Guest guest = reservation.getGuest();
             System.out.println("[예약 정보]");
             System.out.println("예약번호: "+reservationNum);
-            System.out.println("이름: " +guest.name);
+            System.out.println("이름: " +guest.getName());
             for (String s : reservation.getPeriodOfStay()) {
                 System.out.println(s);
             }
