@@ -1,3 +1,5 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -85,6 +87,8 @@ public class Main {
 
         if (guest.isNew()) hotel.addGuest(guest);
         System.out.println("예약이 완료되었습니다.");
+        System.out.println("고객님의 예약 번호는");
+        System.out.println(rId + "입니다.");
     }
 
     private static void createRoomList(){
@@ -101,7 +105,7 @@ public class Main {
         hotel.addRoomList(Sweet);
     }
 
-    private static Reservation getReservation(Map<String, Reservation> reservations, String UUID) throws Exception{
+    private static Reservation getReservation(Map<String, Reservation> reservations, String UUID) throws CustomException{
         Reservation reservation = reservations.get(UUID);
 
         if (reservation == null) {
@@ -145,10 +149,48 @@ public class Main {
 
         if (!reservations.containsKey(UUID)) {
             throw new CustomException("Invalid UUID");
+        } else {
+            int targetRoomId = reservations.get(UUID).getRoomId();
+            Room targetRoom;
+            for (Room room : hotel.getRoomsList()) {
+                if (room.getRoomId() == targetRoomId) {
+                    System.out.println("취소하시는 예약정보를 확인해 주세요.");
+                    room.printRoomInfo();
+                    System.out.print("숙박 기간 : ");
+                    hotel.getReservations().get(UUID).printPeriodOfStay();
+                    int statyDays = hotel.getReservations().get(UUID).getStayDays();
+                    System.out.println("총 비용 : " + (room.getPrice() * statyDays));
+                    printConfirmMessage();
+
+                    int confirm = sc.nextInt();
+                    if (confirm == 1) {
+                        hotel.getImpossibleList().remove(targetRoomId);
+                        reservations.remove(UUID);
+                    // 취소 혹은 잘못입력시 어떻게 할지 논의 while문으로 돌릴지 else 다 메인으로 추방할지..
+                    } else if (confirm == 2){
+                        System.out.println("취소합니다.");
+                    } else {
+                        System.out.println("잘못 입력했습니다.");
+                    }
+                }
+            }
+
         }
 
-        reservations.remove(UUID);
         System.out.println("요청하신 취소가 완료 되었습니다.");
+    }
+
+    private static void printConfirmMessage() {
+        System.out.println("\n1. 확인      2. 취소");
+    }
+
+    private static String dateFormator(String dateStr) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmXXX");
+        Date date = sdf.parse(dateStr);
+
+        // 포맷 변경
+        sdf.applyPattern("yyyy/MM/dd");
+        return sdf.format(date);
     }
 
 }
