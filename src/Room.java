@@ -45,4 +45,8 @@ public class Room {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public void printRoomInfo() {
+        System.out.println("Room Number : " + this.roomId + " | Room Type : " + this.roomType + " | Room Capacity : " + this.capacity + " | Room Price : " + this.price);
+    }
 }
