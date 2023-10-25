@@ -31,7 +31,7 @@ public class Main {
         int menu = sc.nextInt();
         switch (menu) {
             case 1 -> makeReservation();
-
+            case 2 -> callReservation();
             case 3 -> cancelReservation(hotel.getReservations());
         }
     }
@@ -110,6 +110,31 @@ public class Main {
 
         return reservation;
     }
+
+
+    ///예약 가져오는 함수
+    private static void callReservation() throws CustomException {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("예약번호를 입력해주세요: ");
+
+        String reservationNum = sc.next();
+        if (hotel.getReservations().containsKey(reservationNum)){
+            Reservation reservation =hotel.getReservations().get(reservationNum);
+
+            Guest guest = reservation.getGuest();
+            System.out.println("[예약 정보]");
+            System.out.println("예약번호: "+reservationNum);
+            System.out.println("이름: " +guest.name);
+            for (String s : reservation.getPeriodOfStay()) {
+                System.out.println(s);
+            }
+
+        }else {
+         throw new CustomException("해당 예약번호가 없습니다.");
+        }
+
+    }
+
 
     private static void cancelReservation(Map<String, Reservation> reservations) throws CustomException {
 
