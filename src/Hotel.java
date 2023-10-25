@@ -94,7 +94,8 @@ public class Hotel {
         for(Room room : roomsList){
             int roomId = room.getRoomId();
             if(checkImpossible(roomId,date)){
-                System.out.println("Room Number | " + room.getRoomId() + "Room Type | " + room.getRoomType() + " Room Capacity | " + room.getCapacity() + " Room Price | " + room.getPrice());
+                System.out.printf("%s | %-14s| %s | %s %d\n", "Room Number " + room.getRoomId(), "Room Type " + room.getRoomType(), "Room Capacity " + room.getCapacity(), "Room Price ", room.getPrice());
+//                System.out.println("Room Number " + room.getRoomId() + " | Room Type " + room.getRoomType() + " | Room Capacity " + room.getCapacity() + " | Room Price " + room.getPrice());
             }
         }
     }

@@ -9,9 +9,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         hotel = new Hotel();
-
         createRoomList();
-        displayMenu();
+
+        while (true) {
+            displayMenu();
+        }
     }
 
     private static void displayMenu() throws Exception {
@@ -39,25 +41,19 @@ public class Main {
         System.out.print("이름을 입력해주세요: ");
         String name = sc.next();
 
-        System.out.print("\n전화번호를 입력해주세요: ");
+        System.out.print("전화번호를 입력해주세요: ");
         String phone = sc.next();
 
-        System.out.print("\n소지 금액을 입력해주세요: ");
+        System.out.print("소지 금액을 입력해주세요: ");
         int cash = sc.nextInt();
 
-        // 1. 고객 존재 확인 -> 없으면 신규
         Guest guest = hotel.findOrCreateGuest(name, phone, cash);
 
-
-        // 2. 예약할 날짜 입력
         System.out.print("예약하실 날짜를 입력해주세요(예시, 2023/4/29): ");
         String input = sc.next();
         System.out.print("예약하실 기간을 입력해주세요: ");
         int duration = sc.nextInt();
 
-        // 2. 예약 가능한 방 출력, 예약할 방 입력
-
-        // 3.  예약 날짜에 맞는 가능한 방 출력 맞게 출력 -> 예약할 날짜에 맞는 방 리스트를 보여준다.
         String[] split = input.split("/");
         int year = Integer.parseInt(split[0]);
         int month = Integer.parseInt(split[1]);
@@ -68,9 +64,9 @@ public class Main {
         for (int i = 0; i < duration; i++) {
             date.add(ZonedDateTime.of(LocalDateTime.of(year, month, day, 15, 0), ZoneId.of("Asia/Seoul")).plusDays(i).toString().substring(0, 22));
         }
+
         hotel.printAvailableRooms(date);
 
-        // 3. 예약할 방 입력
         System.out.print("예약할 방 번호를 입력해주세요: ");
         int roomIndex = sc.nextInt();
 
@@ -80,13 +76,12 @@ public class Main {
 
         System.out.print("이용 인원을 입력해주세요: ");
         int personnel = sc.nextInt();
-        if (room.getCapacity() > personnel) throw new CustomException("숙박 가능한 인원을 초과했습니다.");
+        if (room.getCapacity() < personnel) throw new CustomException("숙박 가능한 인원을 초과했습니다.");
 
-        // 4. 예약 정보 저장
         String rId = UUID.randomUUID().toString();
         Reservation reservation = new Reservation(roomIndex, guest, date);
+
         hotel.addReservationList(rId, reservation);
-        // 5. 호텔에 해당 방 예약 정보 입력
         hotel.addImpossibleList(roomIndex,date);
     }
 
