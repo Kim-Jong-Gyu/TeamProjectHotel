@@ -84,6 +84,7 @@ public class Main {
         hotel.addImpossibleList(roomIndex,date);
 
         if (guest.isNew()) hotel.addGuest(guest);
+        System.out.println("예약이 완료되었습니다.");
     }
 
     private static void createRoomList(){
