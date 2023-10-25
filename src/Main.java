@@ -103,7 +103,7 @@ public class Main {
         hotel.addRoomList(Sweet);
     }
 
-    private static Reservation getReservation(Map<String, Reservation> reservations, String UUID) throws Exception{
+    private static Reservation getReservation(Map<String, Reservation> reservations, String UUID) throws CustomException{
         Reservation reservation = reservations.get(UUID);
 
         if (reservation == null) {
