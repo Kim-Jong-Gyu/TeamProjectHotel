@@ -39,6 +39,10 @@ public class Hotel {
         reservations.put(rId, reservation);
     }
 
+    public void addGuest(Guest guest) {
+        this.guestsList.add(guest);
+    }
+
     // impossibleList 에 값 추가
     public void addImpossibleList(int roomId, ArrayList<String> date) {
         impossibleList.put(roomId, date);
@@ -67,9 +71,10 @@ public class Hotel {
 
     public Guest findOrCreateGuest(String name, String phone, int cash) {
         for(Guest guest : guestsList){
-            if(guest.name.equals(name)){
-                if(guest.phone.equals(phone)){
+            if(guest.getName().equals(name)){
+                if(guest.getPhone().equals(phone)){
                     guest.setCash(cash);
+                    guest.setNew(false);
                     return guest;
                 }
             }
