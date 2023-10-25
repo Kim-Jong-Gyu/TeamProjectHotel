@@ -13,6 +13,10 @@ public class Reservation {
         this.periodOfStay = periodOfStay;
     }
 
+    public Guest getGuest() {
+        return guest;
+    }
+
     public ArrayList<String> getPeriodOfStay() {
         return periodOfStay;
     }
