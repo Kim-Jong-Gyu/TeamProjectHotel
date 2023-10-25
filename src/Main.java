@@ -6,10 +6,9 @@ import java.util.*;
 public class Main {
 
     private static Hotel hotel;
-    private static Map<Integer, ScheduledDate> scheduledDateMap;
+
     public static void main(String[] args) throws Exception {
         hotel = new Hotel();
-        scheduledDateMap = new HashMap<>();
 
         displayMenu();
     }
