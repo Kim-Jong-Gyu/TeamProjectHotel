@@ -58,7 +58,6 @@ public class Main {
         int year = Integer.parseInt(split[0]);
         int month = Integer.parseInt(split[1]);
         int day = Integer.parseInt(split[2]);
-        String dateStr = String.valueOf(year) + month + day;
 
         ArrayList<String> date = new ArrayList<>();
         for (int i = 0; i < duration; i++) {
@@ -83,6 +82,8 @@ public class Main {
 
         hotel.addReservationList(rId, reservation);
         hotel.addImpossibleList(roomIndex,date);
+
+        if (guest.isNew()) hotel.addGuest(guest);
     }
 
     private static void createRoomList(){
@@ -91,6 +92,7 @@ public class Main {
         Room Deluxe = new Room(3,"디럭스", 2, 110000);
         Room Twin = new Room(4,"트윈", 2, 120000);
         Room Sweet = new Room(5,"스위트", 4, 200000);
+
         hotel.addRoomList(single);
         hotel.addRoomList(Double);
         hotel.addRoomList(Deluxe);
