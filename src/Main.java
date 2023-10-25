@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         hotel = new Hotel();
 
+        createRoomList();
         displayMenu();
     }
 
@@ -55,8 +56,6 @@ public class Main {
         int duration = sc.nextInt();
 
         // 2. 예약 가능한 방 출력, 예약할 방 입력
-        createRoomList();
-
 
         // 3.  예약 날짜에 맞는 가능한 방 출력 맞게 출력 -> 예약할 날짜에 맞는 방 리스트를 보여준다.
         String[] split = input.split("/");
