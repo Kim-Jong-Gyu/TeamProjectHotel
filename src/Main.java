@@ -62,13 +62,12 @@ public class Main {
         if(!invalidReservationDate(year,month,day))
             throw new CustomException("잘못된 예약 날짜입니다.");
 
+
         System.out.print("예약하실 기간을 입력해주세요: ");
         int duration = sc.nextInt();
 
-
-
         ArrayList<String> date = new ArrayList<>();
-        for (int i = 0; i < duration; i++) {
+        for (int i = 0; i < duration + 1; i++) {
             date.add(ZonedDateTime.of(LocalDateTime.of(year, month, day, 15, 0), ZoneId.of("Asia/Seoul")).plusDays(i).toString().substring(0, 22));
         }
 
@@ -81,17 +80,21 @@ public class Main {
         }
         Room room = hotel.getRoom(roomIndex);
         if (room == null) throw new CustomException("존재하지 않는 방 번호입니다.");
-        if (room.getPrice() > cash) throw new CustomException("소지금이 부족합니다.");
+        if ((room.getPrice() * duration) > cash) throw new CustomException("소지금이 부족합니다.");
 
         System.out.print("이용 인원을 입력해주세요: ");
         int personnel = sc.nextInt();
         if (room.getCapacity() < personnel) throw new CustomException("숙박 가능한 인원을 초과했습니다.");
+
 
         String rId = UUID.randomUUID().toString();
         Reservation reservation = new Reservation(roomIndex, guest, date);
 
         hotel.addReservationList(rId, reservation);
         hotel.addImpossibleList(roomIndex,date);
+
+        // guest Price 변경
+        guest.setCash(cash - room.getPrice() * duration);
 
         if (guest.isNew()) hotel.addGuest(guest);
         System.out.println("예약이 완료되었습니다.");
@@ -137,10 +140,8 @@ public class Main {
             System.out.println("[예약 정보]");
             System.out.println("예약번호: "+reservationNum);
             System.out.println("이름: " +guest.getName());
-            for (String s : reservation.getPeriodOfStay()) {
-                System.out.println(s);
-            }
-
+            System.out.println("입실 날짜: " +reservation.getPeriodOfStay().get(0));
+            System.out.println("퇴실 날짜: " +reservation.getPeriodOfStay().get(reservation.getPeriodOfStay().size() - 1));
         }else {
          throw new CustomException("해당 예약번호가 없습니다.");
         }
@@ -166,8 +167,8 @@ public class Main {
                     room.printRoomInfo();
                     System.out.print("숙박 기간 : ");
                     hotel.getReservations().get(UUID).printPeriodOfStay();
-                    int statyDays = hotel.getReservations().get(UUID).getStayDays();
-                    System.out.println("총 비용 : " + (room.getPrice() * statyDays));
+                    int stayDays = hotel.getReservations().get(UUID).getStayDays();
+                    System.out.println("총 비용 : " + (room.getPrice() * stayDays));
                     printConfirmMessage();
 
                     int confirm = sc.nextInt();
@@ -223,7 +224,7 @@ public class Main {
             System.out.println("돈: " + value.getGuest().getCash());
             System.out.println("예약 방 번호 : " + value.getRoomId());
             System.out.println("예약 날짜: " + value.getPeriodOfStay().get(0));
-            System.out.println("숙박 기간: " + value.getPeriodOfStay().size());
+            System.out.println("숙박 기간: " + value.getPeriodOfStay());
             System.out.println("------------------------------------------------------------------------");
         });
     }

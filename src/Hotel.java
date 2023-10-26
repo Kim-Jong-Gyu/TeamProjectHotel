@@ -22,10 +22,6 @@ public class Hotel {
         return reservations;
     }
 
-    public ArrayList<Guest> getGuestsList() {
-        return guestsList;
-    }
-
     public ArrayList<Room> getRoomsList() {
         return roomsList;
     }
@@ -50,23 +46,6 @@ public class Hotel {
 
     public Map<Integer, ArrayList<String>> getImpossibleList() {
         return impossibleList;
-    }
-
-    public void printRoomsList(){
-        for(Room room : roomsList){
-            System.out.println(room.toString());
-        }
-    }
-    public void printReservationsList(){
-        for(String reservationId : reservations.keySet()){
-            System.out.println(reservations.get(reservationId).toString());
-        }
-    }
-
-    public void printGuestList(){
-        for(Guest guest : guestsList){
-            System.out.println(guest.toString());
-        }
     }
 
     public Guest findOrCreateGuest(String name, String phone, int cash) {
