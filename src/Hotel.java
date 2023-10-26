@@ -11,7 +11,6 @@ public class Hotel {
     // checkList -> 날짜, 방 번호 -> 예약 가능한지 아닌지 체크하기 위해
     private Map<Integer, ArrayList<String>> impossibleList;
 
-
     public Hotel() {
         this.reservations = new HashMap<>();
         this.guestsList = new ArrayList<>();
@@ -36,6 +35,10 @@ public class Hotel {
         reservations.put(rId, reservation);
     }
 
+    public void setReservations(String UUid, int roomId) {
+        this.reservations.get(UUid).setRoomId(roomId);
+    }
+
     public void addGuest(Guest guest) {
         this.guestsList.add(guest);
     }
@@ -50,6 +53,11 @@ public class Hotel {
             }
             impossibleList.put(roomId, tmp);
         }else impossibleList.put(roomId, date);
+    }
+
+    public void changeImpossibleList(int newroomId, int oldRoomId) {
+        impossibleList.put(newroomId, this.impossibleList.get(oldRoomId));
+        impossibleList.remove(oldRoomId);
     }
 
     public Map<Integer, ArrayList<String>> getImpossibleList() {
