@@ -96,6 +96,11 @@ public class Main {
             }
         }
 
+        for (int i = 0; i < reservation.getPeriodOfStay().size(); i++) {
+            hotel.removeReservationDate(reservation.getRoomId(), reservation.getPeriodOfStay().get(i));
+        }
+
+        hotel.addImpossibleList(reservation.getRoomId(), dates);
         reservation.setPeriodOfStay(dates);
         hotel.addReservationList(rId, reservation);
 

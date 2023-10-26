@@ -46,7 +46,14 @@ public class Hotel {
 
     // impossibleList 에 값 추가
     public void addImpossibleList(int roomId, ArrayList<String> date) {
-        impossibleList.put(roomId, date);
+        ArrayList<String> tmp = new ArrayList<>();
+        if (impossibleList.containsKey(roomId)) {
+            tmp = impossibleList.get(roomId);
+            for (int i = 0; i < date.size(); i++) {
+                tmp.add(date.get(i));
+            }
+            impossibleList.put(roomId, tmp);
+        }else impossibleList.put(roomId, date);
     }
 
     public Map<Integer, ArrayList<String>> getImpossibleList() {
@@ -118,10 +125,20 @@ public class Hotel {
         return null;
     }
 
+    // 날짜 하나하나 비교하기 위해 만듬
     public boolean checkDate(int roomId, String date) {
         for (String str : this.impossibleList.get(roomId)) {
             if (str.equals(date)) return false;
         }
         return true;
+    }
+
+    public void removeReservationDate(int roomId, String date) {
+        for (String str : this.impossibleList.get(roomId)) {
+            if (str.equals(date)) {
+                impossibleList.get(roomId).remove(str);
+                return;
+            }
+        }
     }
 }
