@@ -163,6 +163,8 @@ public class Main {
         int personnel = sc.nextInt();
         if (room.getCapacity() < personnel) throw new CustomException("숙박 가능한 인원을 초과했습니다.");
 
+        // guest Price 변경
+        guest.setCash(cash - room.getPrice() * duration);
 
         String rId = UUID.randomUUID().toString();
         Reservation reservation = new Reservation(roomIndex, guest, room.getPrice() * date.size(), date);
@@ -170,10 +172,8 @@ public class Main {
         hotel.addReservationList(rId, reservation);
         hotel.addImpossibleList(roomIndex,date);
 
-        // guest Price 변경
-        guest.setCash(cash - room.getPrice() * duration);
-
         if (guest.isNew()) hotel.addGuest(guest);
+
         System.out.println("예약이 완료되었습니다.");
         System.out.println("고객님의 예약 번호는");
         System.out.println(rId + "입니다.");
