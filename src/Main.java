@@ -1,9 +1,10 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
 
@@ -79,8 +80,8 @@ public class Main {
         System.out.print("예약하실 기간을 입력해주세요: ");
         int duration = sc.nextInt();
 
-        int price = hotel.getRoom(reservation.getRoomId()).getPrice() * duration;
-        int guestCash = reservation.getTotalPrice() + reservation.getGuest().getCash();
+        long price = hotel.getRoom(reservation.getRoomId()).getPrice() * duration;
+        long guestCash = reservation.getTotalPrice() + reservation.getGuest().getCash();
 
         if (guestCash < price) throw new CustomException("소지금이 부족합니다.");
 
@@ -126,7 +127,7 @@ public class Main {
         String phone = sc.next();
 
         System.out.print("소지 금액을 입력해주세요: ");
-        int cash = sc.nextInt();
+        long cash = sc.nextLong();
 
         Guest guest = hotel.findOrCreateGuest(name, phone, cash);
 
@@ -143,7 +144,7 @@ public class Main {
         int duration = sc.nextInt();
 
         ArrayList<String> date = new ArrayList<>();
-        for (int i = 0; i < duration + 1; i++) {
+        for (int i = 0; i < duration; i++) {
             date.add(ZonedDateTime.of(LocalDateTime.of(year, month, day, 15, 0), ZoneId.of("Asia/Seoul")).plusDays(i).toString().substring(0, 22));
         }
 
@@ -167,7 +168,7 @@ public class Main {
         guest.setCash(cash - room.getPrice() * duration);
 
         String rId = UUID.randomUUID().toString();
-        Reservation reservation = new Reservation(roomIndex, guest, room.getPrice() * date.size(), date);
+        Reservation reservation = new Reservation(roomIndex, guest, room.getPrice() * duration, date);
 
         hotel.addReservationList(rId, reservation);
         hotel.addImpossibleList(roomIndex,date);

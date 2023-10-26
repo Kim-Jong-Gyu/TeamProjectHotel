@@ -64,7 +64,7 @@ public class Hotel {
         return impossibleList;
     }
 
-    public Guest findOrCreateGuest(String name, String phone, int cash) {
+    public Guest findOrCreateGuest(String name, String phone, long cash) {
         for(Guest guest : guestsList){
             if(guest.getName().equals(name)){
                 if(guest.getPhone().equals(phone)){
