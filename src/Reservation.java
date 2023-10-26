@@ -6,12 +6,12 @@ import java.util.Date;
 public class Reservation {
     private int roomId;
     private Guest guest;
-    private int totalPrice;
+    private long totalPrice;
 
     // 숙박 기간
     private ArrayList<String> periodOfStay;
 
-    public Reservation(int roomId, Guest guest, int totalPrice, ArrayList<String> periodOfStay) {
+    public Reservation(int roomId, Guest guest, long totalPrice, ArrayList<String> periodOfStay) {
         this.roomId = roomId;
         this.guest = guest;
         this.totalPrice = totalPrice;
@@ -30,7 +30,7 @@ public class Reservation {
         return guest;
     }
 
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
@@ -38,7 +38,7 @@ public class Reservation {
         return periodOfStay;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(long totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -67,7 +67,7 @@ public class Reservation {
     }
 
     public int getStayDays() {
-        return periodOfStay.size() - 1;
+        return periodOfStay.size();
     }
 
 }

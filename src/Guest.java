@@ -3,11 +3,11 @@ public class Guest {
 
     private String name;
     private String phone;
-    private int cash;
+    private long cash;
     private boolean isNew;
 
 
-    public Guest(String name, String phone, int cash) {
+    public Guest(String name, String phone, long cash) {
         this.name = name;
         this.phone = phone;
         this.cash = cash;
@@ -22,11 +22,11 @@ public class Guest {
         return phone;
     }
 
-    public int getCash() {
+    public long getCash() {
         return cash;
     }
 
-    public void setCash(int cash) {
+    public void setCash(long cash) {
         this.cash = cash;
     }
 
