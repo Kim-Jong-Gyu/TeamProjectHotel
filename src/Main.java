@@ -52,7 +52,7 @@ public class Main {
         if (input != 1 && input != 2) throw new CustomException("잘못된 입력입니다.");
 
         switch (input) {
-//            case 1 -> changeDateOfReservation();
+            case 1 -> changeDateOfReservation();
             case 2 -> changeRoomTypeOfReservation();
         }
     }
