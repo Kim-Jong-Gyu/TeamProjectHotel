@@ -53,7 +53,7 @@ public class Main {
 
         switch (input) {
             case 1 -> changeDateOfReservation();
-//            case 2 -> changeRoomTypeOfReservation();
+            case 2 -> changeRoomTypeOfReservation();
         }
     }
 
@@ -256,15 +256,6 @@ public class Main {
 
     private static void printConfirmMessage() {
         System.out.println("\n1. 확인      2. 취소");
-    }
-
-    private static String dateFormator(String dateStr) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmXXX");
-        Date date = sdf.parse(dateStr);
-
-        // 포맷 변경
-        sdf.applyPattern("yyyy/MM/dd");
-        return sdf.format(date);
     }
 
     private static boolean invalidReservationDate(int year, int month, int day) {
