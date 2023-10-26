@@ -53,8 +53,58 @@ public class Main {
 
         switch (input) {
             case 1 -> changeDateOfReservation();
-            case 2 -> changeRoomTypeOfReservation();
+//            case 2 -> changeRoomTypeOfReservation();
         }
+    }
+
+    private static void changeDateOfReservation() throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("예약 번호를 입력해주세요: ");
+        String rId = sc.next();
+
+        Map<String, Reservation> reservations = hotel.getReservations();
+        if (!reservations.containsKey(rId)) throw new CustomException("존재하지 않는 예약번호입니다.");
+
+        Reservation reservation = reservations.get(rId);
+
+        System.out.print("변경하실 날짜를 입력해주세요(예시, 2023/4/29): ");
+        String input = sc.next();
+        String[] split = input.split("/");
+        int year = Integer.parseInt(split[0]);
+        int month = Integer.parseInt(split[1]);
+        int day = Integer.parseInt(split[2]);
+        if(!invalidReservationDate(year,month,day)) throw new CustomException("잘못된 예약 날짜입니다.");
+
+        System.out.print("예약하실 기간을 입력해주세요: ");
+        int duration = sc.nextInt();
+
+        int price = hotel.getRoom(reservation.getRoomId()).getPrice() * duration;
+        int guestCash = reservation.getTotalPrice() + reservation.getGuest().getCash();
+
+        if (guestCash < price) throw new CustomException("소지금이 부족합니다.");
+
+        reservation.setTotalPrice(price);
+        reservation.getGuest().setCash(guestCash - price);
+
+        ArrayList<String> dates = new ArrayList<>();
+        for (int i = 0; i < duration; i++) {
+            dates.add(ZonedDateTime.of(LocalDateTime.of(year, month, day, 15, 0), ZoneId.of("Asia/Seoul")).plusDays(i).toString().substring(0, 22));
+            if (!hotel.checkDate(reservation.getRoomId(), dates.get(i))){
+                if (reservation.getPeriodOfStay().contains(dates.get(i))) continue;
+                throw new CustomException("예약이 불가능한 날짜입니다.");
+            }
+        }
+
+        for (int i = 0; i < reservation.getPeriodOfStay().size(); i++) {
+            hotel.removeReservationDate(reservation.getRoomId(), reservation.getPeriodOfStay().get(i));
+        }
+
+        hotel.addImpossibleList(reservation.getRoomId(), dates);
+        reservation.setPeriodOfStay(dates);
+        hotel.addReservationList(rId, reservation);
+
+        System.out.println("날짜 변경이 완료되었습니다.");
     }
 
     private static void makeReservation() throws Exception {
@@ -76,8 +126,7 @@ public class Main {
         int year = Integer.parseInt(split[0]);
         int month = Integer.parseInt(split[1]);
         int day = Integer.parseInt(split[2]);
-        if(!invalidReservationDate(year,month,day))
-            throw new CustomException("잘못된 예약 날짜입니다.");
+        if(!invalidReservationDate(year,month,day)) throw new CustomException("잘못된 예약 날짜입니다.");
 
 
         System.out.print("예약하실 기간을 입력해주세요: ");
@@ -97,7 +146,8 @@ public class Main {
         }
         Room room = hotel.getRoom(roomIndex);
         if (room == null) throw new CustomException("존재하지 않는 방 번호입니다.");
-        if ((room.getPrice() * duration) > cash) throw new CustomException("소지금이 부족합니다.");
+        if (room.getPrice() * date.size() > cash) throw new CustomException("소지금이 부족합니다.");
+
 
         System.out.print("이용 인원을 입력해주세요: ");
         int personnel = sc.nextInt();
@@ -105,7 +155,7 @@ public class Main {
 
 
         String rId = UUID.randomUUID().toString();
-        Reservation reservation = new Reservation(roomIndex, guest, date);
+        Reservation reservation = new Reservation(roomIndex, guest, room.getPrice() * date.size(), date);
 
         hotel.addReservationList(rId, reservation);
         hotel.addImpossibleList(roomIndex,date);
@@ -203,7 +253,7 @@ public class Main {
 
         }
 
-        System.out.println("요청하신 취소가 완료 되었습니다.");
+        System.out.println("요청하신 취소가 완료 되었습니다.\n");
     }
 
     private static void printConfirmMessage() {
