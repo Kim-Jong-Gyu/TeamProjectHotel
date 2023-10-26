@@ -95,14 +95,17 @@ public class Hotel {
     }
 
     // 예약 가능한 방을 출력
-    public void printAvailableRooms(ArrayList<String> date) {
+    public ArrayList<Integer> printAvailableRooms(ArrayList<String> date) {
+        ArrayList<Integer> availableRooms = new ArrayList<>();
         for(Room room : roomsList){
             int roomId = room.getRoomId();
             if(checkImpossible(roomId,date)){
+                availableRooms.add(roomId);
                 System.out.printf("%s | %-14s| %s | %s %d\n", "Room Number " + room.getRoomId(), "Room Type " + room.getRoomType(), "Room Capacity " + room.getCapacity(), "Room Price ", room.getPrice());
 //                System.out.println("Room Number " + room.getRoomId() + " | Room Type " + room.getRoomType() + " | Room Capacity " + room.getCapacity() + " | Room Price " + room.getPrice());
             }
         }
+        return availableRooms;
     }
 
     public Room getRoom(int roomIndex) {

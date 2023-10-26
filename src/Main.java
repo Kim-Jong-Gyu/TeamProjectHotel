@@ -31,7 +31,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         int menu = sc.nextInt();
+        // 0번은 호텔입장에서의 예약조회를 하는겁니다.
         switch (menu) {
+            case 0 -> hotelInquireReservations();
             case 1 -> makeReservation();
             case 2 -> callReservation();
             case 3 -> cancelReservation(hotel.getReservations());
@@ -53,24 +55,30 @@ public class Main {
 
         System.out.print("예약하실 날짜를 입력해주세요(예시, 2023/4/29): ");
         String input = sc.next();
-        System.out.print("예약하실 기간을 입력해주세요: ");
-        int duration = sc.nextInt();
-
         String[] split = input.split("/");
         int year = Integer.parseInt(split[0]);
         int month = Integer.parseInt(split[1]);
         int day = Integer.parseInt(split[2]);
+        if(!invalidReservationDate(year,month,day))
+            throw new CustomException("잘못된 예약 날짜입니다.");
+
+        System.out.print("예약하실 기간을 입력해주세요: ");
+        int duration = sc.nextInt();
+
+
 
         ArrayList<String> date = new ArrayList<>();
         for (int i = 0; i < duration; i++) {
             date.add(ZonedDateTime.of(LocalDateTime.of(year, month, day, 15, 0), ZoneId.of("Asia/Seoul")).plusDays(i).toString().substring(0, 22));
         }
 
-        hotel.printAvailableRooms(date);
+        ArrayList<Integer> checkAvailableRoom = hotel.printAvailableRooms(date);
 
         System.out.print("예약할 방 번호를 입력해주세요: ");
         int roomIndex = sc.nextInt();
-
+        if(!checkAvailableRoom.contains(roomIndex)){
+            throw new CustomException("잘못된 방번호 입력입니다.");
+        }
         Room room = hotel.getRoom(roomIndex);
         if (room == null) throw new CustomException("존재하지 않는 방 번호입니다.");
         if (room.getPrice() > cash) throw new CustomException("소지금이 부족합니다.");
@@ -193,4 +201,30 @@ public class Main {
         return sdf.format(date);
     }
 
+    private static boolean invalidReservationDate(int year, int month, int day) {
+        if (2022 < year && year < 2100) {
+            return switch (month) {
+                case 1, 3, 5, 7, 8, 10, 12 -> day <= 31 && day >= 1;
+                case 2 -> day <= 28 && day >= 1;
+                case 4, 6, 9, 11 -> day <= 30 && day >= 1;
+                default -> false;
+            };
+        }
+        return false;
+    }
+    // 예약 리스트 조회
+    private static void hotelInquireReservations(){
+        Map<String, Reservation> inquireReservations = hotel.getReservations();
+        System.out.println("[전체 예약 정보]");
+        inquireReservations.forEach((key,value) -> {
+            System.out.println("예약번호: "+ key);
+            System.out.println("이름: " + value.getGuest().getName());
+            System.out.println("전화 번호: " + value.getGuest().getPhone());
+            System.out.println("돈: " + value.getGuest().getCash());
+            System.out.println("예약 방 번호 : " + value.getRoomId());
+            System.out.println("예약 날짜: " + value.getPeriodOfStay().get(0));
+            System.out.println("숙박 기간: " + value.getPeriodOfStay().size());
+            System.out.println("------------------------------------------------------------------------");
+        });
+    }
 }
