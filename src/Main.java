@@ -36,7 +36,7 @@ public class Main {
         switch (menu) {
             case 0 -> hotelInquireReservations();
             case 1 -> makeReservation();
-            case 2 -> callReservation();
+            case 2 -> showGuestReservation();
             case 3 -> cancelReservation(hotel.getReservations());
             case 4 -> changeReservation();
         }
@@ -214,8 +214,32 @@ public class Main {
 
     }
 
+    private static void showGuestReservation() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("이름을 입력하세요: ");
+        String name = sc.next();
+        System.out.print("전화번호를 입력하세요: ");
+        String phone = sc.next();
 
-    private static void cancelReservation(Map<String, Reservation> reservations) throws CustomException {
+        Map<String, Reservation> guestReservation = hotel.getReservations();
+        for (Map.Entry<String, Reservation> entry : guestReservation.entrySet()) {
+            String key = entry.getKey();
+            Reservation value = entry.getValue();
+            if (value.getGuest().getName().equals(name) && value.getGuest().getPhone().equals(phone)) {
+                System.out.println("예약번호: " + key);
+                System.out.println("이름: " + value.getGuest().getName());
+                System.out.println("전화 번호: " + value.getGuest().getPhone());
+                System.out.println("돈: " + value.getGuest().getCash());
+                System.out.println("예약 방 번호 : " + value.getRoomId());
+                System.out.println("예약 날짜: " + value.getPeriodOfStay().get(0));
+                System.out.println("숙박 기간: " + value.getPeriodOfStay().size());
+                System.out.println("------------------------------------------------------------------------");
+            }
+        }
+    }
+
+
+        private static void cancelReservation(Map<String, Reservation> reservations) throws CustomException {
 
         Scanner sc = new Scanner(System.in);
 
