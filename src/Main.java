@@ -23,6 +23,7 @@ public class Main {
         System.out.println("1. 예약하기");
         System.out.println("2. 예약 조회하기");
         System.out.println("3. 예약 취소하기");
+        System.out.println("4. 예약 변경하기");
 
         handleMenuInput();
     }
@@ -37,6 +38,22 @@ public class Main {
             case 1 -> makeReservation();
             case 2 -> callReservation();
             case 3 -> cancelReservation(hotel.getReservations());
+            case 4 -> changeReservation();
+        }
+    }
+
+    private static void changeReservation() throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("1. 날짜 변경하기");
+        System.out.println("2. 방 변경하기");
+
+        int input = sc.nextInt();
+        if (input != 1 && input != 2) throw new CustomException("잘못된 입력입니다.");
+
+        switch (input) {
+            case 1 -> changeDateOfReservation();
+            case 2 -> changeRoomTypeOfReservation();
         }
     }
 
@@ -64,8 +81,6 @@ public class Main {
 
         System.out.print("예약하실 기간을 입력해주세요: ");
         int duration = sc.nextInt();
-
-
 
         ArrayList<String> date = new ArrayList<>();
         for (int i = 0; i < duration; i++) {
