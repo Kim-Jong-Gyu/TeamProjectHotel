@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Hotel {
@@ -115,5 +116,12 @@ public class Hotel {
             }
         }
         return null;
+    }
+
+    public boolean checkDate(int roomId, String date) {
+        for (String str : this.impossibleList.get(roomId)) {
+            if (str.equals(date)) return false;
+        }
+        return true;
     }
 }
