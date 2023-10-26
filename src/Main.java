@@ -52,7 +52,7 @@ public class Main {
         if (input != 1 && input != 2) throw new CustomException("잘못된 입력입니다.");
 
         switch (input) {
-            case 1 -> changeDateOfReservation();
+//            case 1 -> changeDateOfReservation();
             case 2 -> changeRoomTypeOfReservation();
         }
     }
@@ -128,17 +128,6 @@ public class Main {
         hotel.addRoomList(Sweet);
     }
 
-    private static Reservation getReservation(Map<String, Reservation> reservations, String UUID) throws CustomException{
-        Reservation reservation = reservations.get(UUID);
-
-        if (reservation == null) {
-            throw new CustomException("Invalid UUID.");
-        }
-
-        return reservation;
-    }
-
-
     ///예약 가져오는 함수
     private static void callReservation() throws CustomException {
         Scanner sc = new Scanner(System.in);
@@ -174,7 +163,6 @@ public class Main {
             throw new CustomException("Invalid UUID");
         } else {
             int targetRoomId = reservations.get(UUID).getRoomId();
-            Room targetRoom;
             for (Room room : hotel.getRoomsList()) {
                 if (room.getRoomId() == targetRoomId) {
                     System.out.println("취소하시는 예약정보를 확인해 주세요.");
@@ -241,5 +229,21 @@ public class Main {
             System.out.println("숙박 기간: " + value.getPeriodOfStay().size());
             System.out.println("------------------------------------------------------------------------");
         });
+    }
+
+    private static void changeRoomTypeOfReservation() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("변경하실 예약번호를 입력해 주세요.");
+        String UUID = sc.next();
+        Reservation targetReservation = hotel.getReservations().get(UUID);
+        int oldRoomId = targetReservation.getRoomId();
+
+        System.out.println("변경가능한 방 목록은 아래와 같습니다");
+        hotel.printAvailableRooms(targetReservation.getPeriodOfStay());
+        System.out.println("\n변경하고자 하는 방 번호를 입력 해 주세요");
+        int newRoomId = sc.nextInt();
+        hotel.setReservations(UUID, newRoomId);
+        hotel.changeImpossibleList(newRoomId, oldRoomId);
     }
 }

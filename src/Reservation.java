@@ -20,6 +20,10 @@ public class Reservation {
         return this.roomId;
     }
 
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
     public Guest getGuest() {
         return guest;
     }
