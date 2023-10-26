@@ -96,6 +96,16 @@ public class Main {
             }
         }
 
+        System.out.println("날짜를 변경하시겠습니까?");
+        System.out.println("1. 확인\t\t\t2. 취소");
+        int choice = sc.nextInt();
+
+        if (choice != 1 && choice != 2) throw new CustomException("잘못된 입력입니다.");
+        if (choice == 2) {
+            System.out.println("예약 변경을 취소합니다.");
+            return;
+        }
+
         for (int i = 0; i < reservation.getPeriodOfStay().size(); i++) {
             hotel.removeReservationDate(reservation.getRoomId(), reservation.getPeriodOfStay().get(i));
         }
