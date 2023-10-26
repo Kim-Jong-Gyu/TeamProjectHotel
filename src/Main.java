@@ -196,26 +196,24 @@ public class Main {
 
     ///예약 가져오는 함수
     private static void callReservation() throws CustomException {
+        System.out.println("\n상세정보를 조회하시려면 예약번호를 입력해 주세요");
         Scanner sc = new Scanner(System.in);
         System.out.print("예약번호를 입력해주세요: ");
+        String UUID = sc.next();
+        if (hotel.getReservations().containsKey(UUID)) {
+            int roomId = hotel.getReservations().get(UUID).getRoomId();
 
-        String reservationNum = sc.next();
-        if (hotel.getReservations().containsKey(reservationNum)){
-            Reservation reservation =hotel.getReservations().get(reservationNum);
-
-            Guest guest = reservation.getGuest();
-            System.out.println("[예약 정보]");
-            System.out.println("예약번호: "+reservationNum);
-            System.out.println("이름: " +guest.getName());
-            System.out.println("입실 날짜: " +reservation.getPeriodOfStay().get(0));
-            System.out.println("퇴실 날짜: " +reservation.getPeriodOfStay().get(reservation.getPeriodOfStay().size() - 1));
-        }else {
-         throw new CustomException("해당 예약번호가 없습니다.");
+            Room room = hotel.getRoomsList().get(roomId);
+            room.printRoomInfo();
+            int stayDays = hotel.getReservations().get(UUID).getStayDays();
+            System.out.println("총 비용 : " + (room.getPrice() * stayDays));
+            System.out.println("메인 화면으로 돌아갑니다");
+        } else {
+            throw new CustomException("Invalid UUID");
         }
-
     }
 
-    private static void showGuestReservation() {
+    private static void showGuestReservation() throws CustomException {
         Scanner sc = new Scanner(System.in);
         System.out.print("이름을 입력하세요: ");
         String name = sc.next();
@@ -237,6 +235,8 @@ public class Main {
                 System.out.println("------------------------------------------------------------------------");
             }
         }
+
+        callReservation();
     }
 
 
